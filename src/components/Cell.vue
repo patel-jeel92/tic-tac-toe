@@ -7,6 +7,7 @@ export default {
   name: "Cell",
   data: () => {
     return {
+      // TODO: Remove default value.
       value: "X",
       frozen: Boolean
     };
@@ -19,7 +20,12 @@ export default {
   },
   methods: {
     handleClick() {
-      // TODO: Handle click event. Use store action to update cell map with active Player and update value.
+      // TODO: Finish stub method.
+      if (!this.frozen) {
+        this.value = this.activePlayer;
+        this.frozen = true;
+        this.$emit("selection", this.index);
+      }
     }
   }
 };
