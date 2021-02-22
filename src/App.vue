@@ -1,17 +1,22 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <Board :arr="squares"></Board>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import Board from "./components/Board.vue";
 
 export default {
   name: "App",
   components: {
-    HelloWorld
+    Board
+  },
+  data: () => {
+    return {
+      squares: Array(9).fill(null)
+    };
   }
 };
 </script>
