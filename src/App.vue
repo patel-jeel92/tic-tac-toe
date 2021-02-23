@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
-    <Board :arr="squares"></Board>
+    <Board></Board>
   </div>
 </template>
 
@@ -12,11 +12,6 @@ export default {
   name: "App",
   components: {
     Board
-  },
-  data: () => {
-    return {
-      squares: Array(9).fill(null)
-    };
   }
 };
 </script>

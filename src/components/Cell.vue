@@ -10,7 +10,6 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Cell",
-  data: () => ({}),
   props: {
     index: {
       type: String,
