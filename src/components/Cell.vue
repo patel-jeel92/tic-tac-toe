@@ -1,30 +1,31 @@
 <template>
-  <button class="button" @click="handleClick">{{ value }}</button>
+  <button class="button" @click="handleClick">
+    {{ this.cells[this.index].mark }}
+  </button>
 </template>
 
 <script>
+import { addPlayerTurn } from "@/store/actions.js";
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   name: "Cell",
-  data: () => {
-    return {
-      // TODO: Remove default value.
-      value: "X",
-      frozen: Boolean
-    };
-  },
+  data: () => ({}),
   props: {
     index: {
       type: String,
       required: true
     }
   },
+  computed: {
+    ...mapGetters(["activePlayer", "cells"])
+  },
   methods: {
+    ...mapActions([addPlayerTurn]),
     handleClick() {
-      // TODO: Finish stub method.
-      if (!this.frozen) {
-        this.value = this.activePlayer;
-        this.frozen = true;
-        this.$emit("selection", this.index);
+      if (!this.cells[this.index].frozen) {
+        const mark = this.activePlayer;
+        this.addPlayerTurn({ index: this.index, mark: mark, frozen: true });
       }
     }
   }

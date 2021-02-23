@@ -27,9 +27,6 @@ export default {
   components: {
     Cell
   },
-  data: () => {
-    return {};
-  },
   methods: {}
 };
 </script>
