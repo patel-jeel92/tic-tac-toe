@@ -1,11 +1,18 @@
+import { addPlayerTurn, changeGameStatus } from "@/store/actions";
+import {
+  SET_GAME_STATUS,
+  INCREMENT_MOVES,
+  UPDATE_CELL_MAP
+} from "@/store/mutations";
+import { UPDATE_PLAYER_TURN } from "../mutations";
+
 // state
 const state = {
   // can be O or X
-  activePlayer: "O",
+  activePlayer: "X",
   // maintains the status of the game: turn or win or draw
-  gameStatus: "turn",
-
-  gameStatusMessage: `O's turn`,
+  gameStatus: "",
+  gameStatusMessage: `X's TURN`,
   // no. of moves played by both players in a single game (max = 9)
   moves: 0,
   // stores the placement of X and O in cells by their cell number
@@ -33,6 +40,7 @@ const state = {
   ]
 };
 
+// getters
 const getters = {
   activePlayer: state => state.activePlayer,
   cells: state => state.cells,
@@ -51,17 +59,47 @@ const getters = {
   winningConditions: state => state.winningConditions
 };
 
+// actions
+const actions = {
+  [addPlayerTurn]: ({ commit, dispatch }, turn) => {
+    commit(UPDATE_CELL_MAP, turn);
+    commit(INCREMENT_MOVES);
+    dispatch(changeGameStatus);
+  },
+  [changeGameStatus]: ({ state, getters, commit }) => {
+    if (getters.isGameWon) {
+      commit(SET_GAME_STATUS, `${getters.activePlayer} WINS!`);
+      // TODO: Prevent users from playing anymore and show status.
+      commit(UPDATE_CELL_MAP);
+      // checks if the game is still not won and all cells are filled
+    } else if (state.moves === 9) {
+      commit(SET_GAME_STATUS, "DRAW");
+    }
+    // sets the status to turn
+    commit(SET_GAME_STATUS, "TURN");
+
+    if (getters.gameStatus === "TURN") {
+      commit(UPDATE_PLAYER_TURN);
+    }
+  }
+};
+
 // mutations
 const mutations = {
-  [SET_GAME_STATUS]: ({ state }, status) => {
+  [SET_GAME_STATUS]: (state, status) => {
     state.gameStatus = status;
   },
-  [INCREMENT_MOVES]: ({ state }) => {
+  [INCREMENT_MOVES]: state => {
     state.moves = state.moves + 1;
   },
-  [UPDATE_CELL_MAP]: ({ state }, turn) => {
+  [UPDATE_CELL_MAP]: (state, turn) => {
     state.cells[turn.index].mark = turn.mark;
     state.cells[turn.index].frozen = turn.frozen;
+  },
+  [UPDATE_PLAYER_TURN]: state => {
+    state.activePlayer === "X"
+      ? (state.activePlayer = "O")
+      : (state.activePlayer = "X");
   }
 };
 
